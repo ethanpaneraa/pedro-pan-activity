@@ -4,25 +4,41 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-export function HistoricalIntroModal() {
+export function HistoricalIntroModal({
+  forceShow = false,
+  onClose = () => {},
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
+    // Check if we should force show the modal
+    if (forceShow) {
+      setIsVisible(true);
+      return;
+    }
+
+    // Otherwise, show modal on initial load if not seen before
     const hasSeenModal = localStorage.getItem("hasSeenPedroPanIntro");
     if (!hasSeenModal) {
+      // Slight delay for better UX
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [forceShow]);
 
   const closeModal = () => {
+    // Start close animation
     setIsClosing(true);
+
+    // Wait for animation to complete before removing from DOM
     setTimeout(() => {
       setIsVisible(false);
+      setIsClosing(false);
       localStorage.setItem("hasSeenPedroPanIntro", "true");
+      onClose(); // Call the onClose callback
     }, 600);
   };
 
@@ -78,8 +94,8 @@ export function HistoricalIntroModal() {
                 >
                   <h3 className="font-semibold mb-2">Historical Context:</h3>
                   <p>
-                    Following the Cuban Revolution and Fidel Castro&apos;s rise
-                    to power in 1959, rumors spread that the new communist
+                    Following the Cuban Revolution and Fidel Castro's rise to
+                    power in 1959, rumors spread that the new communist
                     government would remove parental authority and send children
                     to Soviet work camps. This led many parents to make the
                     heartbreaking decision to send their children to the United
@@ -122,8 +138,8 @@ export function HistoricalIntroModal() {
                     opacity: 0,
                   }}
                 >
-                  &quot;Operation Pedro Pan was one of the largest exodus of
-                  unaccompanied minors in the Western Hemisphere.&qout;
+                  "Operation Pedro Pan was one of the largest exodus of
+                  unaccompanied minors in the Western Hemisphere."
                 </p>
               </div>
 

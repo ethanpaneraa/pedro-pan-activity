@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Info } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -67,6 +68,7 @@ export default function Home() {
   const [gameState, setGameState] = useState<
     "selection" | "scenario" | "outcome" | "reflection"
   >("selection");
+  const [showModal, setShowModal] = useState(false);
 
   const handleScenarioSelect = (scenario: (typeof scenarios)[0]) => {
     setCurrentScenario(scenario);
@@ -84,13 +86,28 @@ export default function Home() {
     setGameState("selection");
   };
 
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-b from-blue-100 to-red-100">
       {/* Include the historical intro modal */}
-      <HistoricalIntroModal />
+      <HistoricalIntroModal forceShow={showModal} onClose={handleModalClose} />
 
       <Card className="w-full max-w-2xl">
-        <CardHeader>
+        <CardHeader className="relative pb-2">
+          <div className="absolute top-4 right-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowModal(true)}
+              className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full"
+              title="Historical Context"
+            >
+              <Info size={24} />
+            </Button>
+          </div>
           <CardTitle className="text-2xl font-bold text-center">
             Cuban Exodus: 1961
           </CardTitle>
@@ -102,7 +119,9 @@ export default function Home() {
         <CardContent>
           {gameState === "selection" && (
             <div className="space-y-4">
-              <p className="text-lg font-semibold">Choose a scenario:</p>
+              <div className="flex justify-between items-center">
+                <p className="text-lg font-semibold">Choose a scenario:</p>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {scenarios.map((scenario) => (
                   <Button
