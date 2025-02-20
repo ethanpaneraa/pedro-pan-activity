@@ -6,12 +6,11 @@ import { X } from "lucide-react";
 
 export function HistoricalIntroModal() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
-    // Show modal on initial load
     const hasSeenModal = localStorage.getItem("hasSeenPedroPanIntro");
     if (!hasSeenModal) {
-      // Slight delay for better UX
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 500);
@@ -20,19 +19,28 @@ export function HistoricalIntroModal() {
   }, []);
 
   const closeModal = () => {
-    setIsVisible(false);
-    localStorage.setItem("hasSeenPedroPanIntro", "true");
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      localStorage.setItem("hasSeenPedroPanIntro", "true");
+    }, 600);
   };
 
   if (!isVisible) return null;
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 ease-in-out flex items-center justify-center backdrop-blur-sm">
+      <div
+        className={`fixed inset-0 bg-black ${
+          isClosing ? "animate-fade-out" : "bg-opacity-50"
+        } z-50 transition-opacity duration-500 ease-in-out flex items-center justify-center backdrop-blur-sm`}
+      >
         <div
-          className="w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-500 ease-out"
+          className={`w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden ${
+            isClosing ? "animate-modal-exit" : ""
+          }`}
           style={{
-            animation: "modalEnter 0.6s ease-out forwards",
+            animation: !isClosing ? "modalEnter 0.6s ease-out forwards" : "",
           }}
         >
           <div className="relative">
@@ -161,6 +169,34 @@ export function HistoricalIntroModal() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        .animate-fade-out {
+          animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        .animate-modal-exit {
+          animation: modalExit 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+          from {
+            opacity: 0.5;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+
+        @keyframes modalExit {
+          from {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+          to {
+            opacity: 0;
+            transform: scale(0.95) translateY(-20px);
           }
         }
       `}</style>
