@@ -78,8 +78,8 @@ export function HistoricalIntroModal() {
                 >
                   <h3 className="font-semibold mb-2">Historical Context:</h3>
                   <p>
-                    Following the Cuban Revolution and Fidel Castro's rise to
-                    power in 1959, rumors spread that the new communist
+                    Following the Cuban Revolution and Fidel Castro&apos;s rise
+                    to power in 1959, rumors spread that the new communist
                     government would remove parental authority and send children
                     to Soviet work camps. This led many parents to make the
                     heartbreaking decision to send their children to the United
@@ -122,8 +122,8 @@ export function HistoricalIntroModal() {
                     opacity: 0,
                   }}
                 >
-                  "Operation Pedro Pan was one of the largest exodus of
-                  unaccompanied minors in the Western Hemisphere."
+                  &quot;Operation Pedro Pan was one of the largest exodus of
+                  unaccompanied minors in the Western Hemisphere.&qout;
                 </p>
               </div>
 
