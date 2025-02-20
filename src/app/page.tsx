@@ -1,101 +1,173 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { HistoricalIntroModal } from "@/components/intro-modal";
+
+const scenarios = [
+  {
+    id: 1,
+    title: "The Young Child",
+    description:
+      "Your child is 6 years old. Rumors are spreading that your parental rights will be taken away, and your child will be placed in communist indoctrination centers. You have one tia in Miami, but no immediate family there. You are a working-class family.",
+    question:
+      "Do you send your child to the United States or keep them in Cuba?",
+  },
+  {
+    id: 2,
+    title: "The Teenager",
+    description:
+      "Your child is 14 years old. All your family is in Cuba. The militia has closed catholic and private schools, and you can no longer attend school. You are a middle-class family.",
+    question:
+      "Do you send your child to the United States or keep them in Cuba?",
+  },
+  {
+    id: 3,
+    title: "The Child of Activists",
+    description:
+      "Your child is 8 years old. Your parents are actively fighting against Castro and his regime. If you choose to send your child to the United States, they can only take one 40-pound bag. You are a middle-class family. You have some family in Miami.",
+    question:
+      "Do you send your child to the United States or keep them in Cuba?",
+  },
+  {
+    id: 4,
+    title: "The Older Teen",
+    description:
+      "Your child is 16 years old. Your parents heard about priests, brothers, and bishops being rounded up by the Castro regime at gunpoint on September 1961. They were sent out of Cuba in a Spanish ship called Covadonga. Priests who remained were sent to forced labor camps. You're a working-class family. You have no family in Miami. Your family has never been involved in political matters, but tensions are rising.",
+    question:
+      "Do you send your child to the United States or keep them in Cuba?",
+  },
+];
+
+const outcomes = {
+  us: "Your child was part of Operation Pedro Pan, which brought 14,000 Cuban children to the U.S. between 1960-1962. They were placed in the Cuban Children's Program (CCP), run by the Catholic Welfare Bureau. If they had no family in Miami, they were placed in orphanages or foster homes. Some children never reunite with their parents. The Church enforced strict rules, ensuring children learned English and adapted to American culture. Many Pedro Pan children struggled with loss, loneliness, and cultural identity, but some adapted and built successful lives in the U.S.",
+  cuba: "The U.S. embargo of the 1960s caused severe economic hardship. Your family struggled with food shortages and poverty. Your child was required to join the Union of Cuban Pioneers, later renamed the José Martí Pioneers Organization (OPJM). They were indoctrinated with communist ideology in school, learning slogans like: 'To die for the fatherland is to live.' Some families who stayed in Cuba faced government surveillance, limiting their ability to leave later. Others adapted, staying in Cuba and supporting the revolution.",
+};
+
+const reflectionQuestions = [
+  "How did you decide what to do?",
+  "What were the biggest factors that influenced your choice?",
+  "Do you think your decision would have changed if you were really living in 1961 Cuba? Why or why not?",
+  "How do you think the experiences of Operation Pedro Pan compare to modern migration crises?",
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [currentScenario, setCurrentScenario] = useState<
+    (typeof scenarios)[0] | null
+  >(null);
+  const [decision, setDecision] = useState<string | null>(null);
+  const [gameState, setGameState] = useState<
+    "selection" | "scenario" | "outcome" | "reflection"
+  >("selection");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const handleScenarioSelect = (scenario: (typeof scenarios)[0]) => {
+    setCurrentScenario(scenario);
+    setGameState("scenario");
+  };
+
+  const handleDecision = (choice: "us" | "cuba") => {
+    setDecision(choice);
+    setGameState("outcome");
+  };
+
+  const resetGame = () => {
+    setCurrentScenario(null);
+    setDecision(null);
+    setGameState("selection");
+  };
+
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-b from-blue-100 to-red-100">
+      {/* Include the historical intro modal */}
+      <HistoricalIntroModal />
+
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">
+            Cuban Exodus: 1961
+          </CardTitle>
+          <CardDescription className="text-center">
+            Experience the difficult decisions faced by Cuban parents during the
+            early 1960s.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {gameState === "selection" && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">Choose a scenario:</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {scenarios.map((scenario) => (
+                  <Button
+                    key={scenario.id}
+                    onClick={() => handleScenarioSelect(scenario)}
+                    className="h-auto py-4 text-left"
+                  >
+                    <div>
+                      <p className="font-semibold">{scenario.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {scenario.description.split(".")[0]}.
+                      </p>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+          {gameState === "scenario" && currentScenario && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">{currentScenario.title}</p>
+              <p className="text-lg">{currentScenario.description}</p>
+              <p className="text-lg font-semibold">
+                {currentScenario.question}
+              </p>
+            </div>
+          )}
+          {gameState === "outcome" && decision && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">Outcome:</p>
+              <p className="text-lg">
+                {outcomes[decision as keyof typeof outcomes]}
+              </p>
+            </div>
+          )}
+          {gameState === "reflection" && (
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">Reflect on your decision:</p>
+              <ul className="list-disc list-inside space-y-2">
+                {reflectionQuestions.map((question, index) => (
+                  <li key={index} className="text-lg">
+                    {question}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-center space-x-4">
+          {gameState === "scenario" && (
+            <>
+              <Button onClick={() => handleDecision("us")}>Send to U.S.</Button>
+              <Button onClick={() => handleDecision("cuba")}>
+                Keep in Cuba
+              </Button>
+            </>
+          )}
+          {gameState === "outcome" && (
+            <Button onClick={() => setGameState("reflection")}>Reflect</Button>
+          )}
+          {gameState === "reflection" && (
+            <Button onClick={resetGame}>Choose New Scenario</Button>
+          )}
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
